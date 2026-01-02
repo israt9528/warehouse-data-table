@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DataTable from "datatables.net-react";
 import DT from "datatables.net-dt";
 import Buttons from "datatables.net-buttons";
@@ -7,15 +7,17 @@ import Responsive from "datatables.net-responsive-dt";
 
 import "datatables.net-dt/css/dataTables.dataTables.css";
 import "datatables.net-buttons-dt/css/buttons.dataTables.css";
-
+import "datatables.net-buttons/js/dataTables.buttons";
 import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-buttons/js/buttons.print";
+import "datatables.net-buttons/js/buttons.colVis";
 
 import jszip from "jszip";
 import pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 
 window.JSZip = jszip;
+window.pdfMake = pdfMake;
 
 DataTable.use(DT);
 DataTable.use(Buttons);
@@ -24,9 +26,11 @@ DataTable.use(Responsive);
 
 const App = () => {
   const tableRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const tableData = [
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "501 505",
       goodsName: "COFFEE",
@@ -38,6 +42,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "ADNAN ROOMY",
       ctnNo: "501 507",
       goodsName: "CHAIR UNIQUE HAVE COMPRESSION ROD",
@@ -49,6 +54,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "ABDUI KADER",
       ctnNo: "501 508",
       goodsName: "BATTERY",
@@ -60,6 +66,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "ISRAT ENAMUL",
       ctnNo: "501 509",
       goodsName: "TOOTHBRUSH MOLD-SHRINKAGE PREVENTION AGENT",
@@ -71,6 +78,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SLS OVI",
       ctnNo: "501 510",
       goodsName: "STEERING WHEEL",
@@ -82,6 +90,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SRI COLLINS",
       ctnNo: "501 512",
       goodsName: "COATING",
@@ -93,6 +102,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SAIFUL STI",
       ctnNo: "501 514",
       goodsName: "",
@@ -104,6 +114,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SAIFUL STI",
       ctnNo: "501 515",
       goodsName: "",
@@ -115,6 +126,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SAIFUL STI",
       ctnNo: "501 516",
       goodsName: "SMART WATCH",
@@ -126,6 +138,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SAIFUL STI",
       ctnNo: "501 517",
       goodsName: "",
@@ -137,6 +150,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SAIFUL STI",
       ctnNo: "501 518",
       goodsName: "",
@@ -148,6 +162,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SAIFUL STI",
       ctnNo: "501 519",
       goodsName: "LED LIGHT WITH BATTERY",
@@ -159,6 +174,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "SOHEL ORNOB",
       ctnNo: "501 521",
       goodsName: "",
@@ -170,6 +186,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "NEHA TIME",
       ctnNo: "501 523",
       goodsName: "",
@@ -181,6 +198,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "NEHA TIME",
       ctnNo: "501 524",
       goodsName: "SMART WATCH",
@@ -192,6 +210,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "NEHA TIME",
       ctnNo: "501 525",
       goodsName: "",
@@ -203,6 +222,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "GTEK SALIM",
       ctnNo: "501 526",
       goodsName: "HEADPHONE",
@@ -214,6 +234,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "INK BOX",
@@ -225,6 +246,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "HAIRMASK",
@@ -236,6 +258,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "CLOCK",
@@ -247,6 +270,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "AMAYET SALAR",
       ctnNo: "2ABINA",
       goodsName: "ANEMOMETER",
@@ -258,6 +282,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "MAHAMMED",
       ctnNo: "2ABINA",
       goodsName: "BLACKHEAD CREAM",
@@ -269,6 +294,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "LIPSTICK",
@@ -280,6 +306,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "FOOD",
@@ -291,6 +318,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "FAN",
@@ -302,6 +330,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "NADIM ARC RAKIB",
       ctnNo: "2ABINA",
       goodsName: "LIP MASK",
@@ -313,6 +342,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "ARC RAKIB",
       ctnNo: "2ABINA",
       goodsName: "PERFUME",
@@ -324,6 +354,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "ZABINA",
       ctnNo: "2ABINA",
       goodsName: "AIR-PRESSURE ROD",
@@ -335,6 +366,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "MAHAMMED",
       ctnNo: "2ABINA",
       goodsName: "LIP GLOSS",
@@ -346,6 +378,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "MASK",
@@ -357,6 +390,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "PERFUME",
@@ -368,6 +402,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "PERFUME",
@@ -379,6 +414,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "JUBAR KABIN MM01",
       ctnNo: "501 533",
       goodsName: "LIGHT WITH BATTERY",
@@ -390,6 +426,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PARCEL OSMAN",
       ctnNo: "2ABINA",
       goodsName: "SATISFACTION",
@@ -401,6 +438,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PARCEL OSMAN",
       ctnNo: "2ABINA",
       goodsName: "EXPERIENCE",
@@ -412,6 +450,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "ZABINA",
       ctnNo: "2ABINA",
       goodsName: "CARPET COFFEE",
@@ -423,6 +462,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "PURPLE WAVE",
       ctnNo: "2ABINA",
       goodsName: "REPACK CHARGE",
@@ -434,11 +474,7 @@ const App = () => {
       cbm: "",
     },
     {
-      isSpecialRow: true,
-      specialText:
-        "yellow mark customer seed share to pay return goods car charge: 38 RMB",
-    },
-    {
+      shipment: "",
       customerName: "SLS OVI",
       ctnNo: "502 284",
       goodsName: "ROLLER LID FOR 2025 AAC TS WITH BATTERY",
@@ -450,6 +486,7 @@ const App = () => {
       cbm: "0.20",
     },
     {
+      shipment: "",
       customerName: "SRI COLLINS",
       ctnNo: "502 286",
       goodsName: "DEHUMIDIFIER WITH BATTERY",
@@ -461,6 +498,7 @@ const App = () => {
       cbm: "",
     },
     {
+      shipment: "",
       customerName: "ABIR",
       ctnNo: "502 288",
       goodsName: "STEERING WHEEL WITH AIRBAG",
@@ -472,11 +510,7 @@ const App = () => {
       cbm: "",
     },
     {
-      isSpecialRow: true,
-      specialText:
-        "green mark customer seed share to pay return goods car charge: 38 RMB",
-    },
-    {
+      shipment: "",
       customerName: "JUBAR KABIN MM01",
       ctnNo: "500 298",
       goodsName: "MINING CUP WITH BATTERY",
@@ -489,38 +523,37 @@ const App = () => {
     },
   ];
 
-  const normalRows = tableData.filter((row) => !row.isSpecialRow);
-
-  const specialRows = tableData
-    .map((row, index) => (row.isSpecialRow ? { ...row, index } : null))
-    .filter(Boolean);
-
   useEffect(() => {
     if (!tableRef.current) return;
     const api = tableRef.current.dt();
 
-    api.on("draw", () => {
-      const tbody = api.table().body();
-      specialRows.forEach((special) => {
-        const tr = document.createElement("tr");
-        const td = document.createElement("td");
-        td.colSpan = 9;
-        td.innerText = special.specialText;
-        td.className = special.specialText.includes("yellow")
-          ? "bg-yellow-100 text-yellow-800 font-bold text-xs px-4 py-3 border-y border-yellow-200 uppercase"
-          : "bg-green-100 text-green-800 font-bold text-xs px-4 py-3 border-y border-green-200 uppercase";
+    // Completely remove the default search box from the DOM
+    setTimeout(() => {
+      const searchWrapper = document.querySelector(".dataTables_filter");
+      if (searchWrapper) {
+        searchWrapper.remove();
+      }
+    }, 100);
+  }, []);
 
-        tr.appendChild(td);
-        if (tbody.children[special.index]) {
-          tbody.insertBefore(tr, tbody.children[special.index]);
-        }
-      });
-    });
-  }, [specialRows]);
+  // Handle search term changes
+  useEffect(() => {
+    if (!tableRef.current) return;
+    const api = tableRef.current.dt();
+    api.search(searchTerm).draw();
+  }, [searchTerm]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-350 mx-auto">
         {/* Header with Gradient */}
         <div className="mb-8 bg-linear-to-r from-[#005660] via-[#008594] to-[#01abc9] rounded-2xl shadow-2xl p-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between">
@@ -537,15 +570,13 @@ const App = () => {
               <div className="flex items-center gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">
-                    {normalRows.length}
+                    {tableData.length}
                   </div>
                   <div className="text-sm text-blue-100">Total Items</div>
                 </div>
                 <div className="h-8 w-px bg-white/30"></div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white">
-                    {specialRows.length}
-                  </div>
+                  <div className="text-2xl font-bold text-white">0</div>
                   <div className="text-sm text-blue-100">Special Notes</div>
                 </div>
               </div>
@@ -580,39 +611,105 @@ const App = () => {
               </div>
             </div>
 
+            {/* Live Search Bar */}
+            <div className="mb-6">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-30 transition duration-200"></div>
+                <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 p-4">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 ml-2">
+                      <svg
+                        className="w-6 h-6 text-blue-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-grow ml-4">
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        placeholder="Search across all columns (Customer, CTN No, Goods Name, Chinese Name, Express No, etc.)..."
+                        className="w-full px-4 py-3 text-gray-700 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                      />
+                    </div>
+                    {searchTerm && (
+                      <button
+                        onClick={handleClearSearch}
+                        className="ml-4 flex-shrink-0 px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition duration-200 font-medium shadow-md hover:shadow-lg"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-3 flex items-center justify-between">
+                    <div className="text-sm text-gray-500">
+                      <span className="font-medium text-blue-600">
+                        {searchTerm ? "Filtering active" : "Ready to search"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* DataTable */}
             <DataTable
               ref={tableRef}
-              data={normalRows}
+              data={tableData}
               paging
-              searching
+              searching={false} // Disable default search
               ordering
               responsive
-              dom="<'flex flex-col md:flex-row md:items-center justify-between mb-6'Bf>rt<'flex flex-col md:flex-row md:items-center justify-between mt-6'ip>"
+              dom="Bfrtip" // Changed to include buttons (B), filter (f), table (t), info (i), pagination (p)
               buttons={[
                 {
                   extend: "copy",
+                  text: "📋 Copy",
                   className:
-                    "!bg-gradient-to-r !from-slate-700 !to-slate-800 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                    "!bg-gradient-to-r !from-slate-700 !to-slate-800 !text-white !border-none !px-4 !py-2.5 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200 !mr-2",
                 },
                 {
                   extend: "excel",
+                  text: "📊 Excel",
                   className:
-                    "!bg-gradient-to-r !from-emerald-500 !to-green-600 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                    "!bg-gradient-to-r !from-emerald-500 !to-green-600 !text-white !border-none !px-4 !py-2.5 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200 !mr-2",
                 },
                 {
                   extend: "pdf",
+                  text: "📄 PDF",
                   className:
-                    "!bg-gradient-to-r !from-rose-500 !to-pink-600 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                    "!bg-gradient-to-r !from-rose-500 !to-pink-600 !text-white !border-none !px-4 !py-2.5 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200 !mr-2",
                 },
                 {
                   extend: "print",
+                  text: "🖨️ Print",
                   className:
-                    "!bg-gradient-to-r !from-sky-500 !to-blue-600 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                    "!bg-gradient-to-r !from-sky-500 !to-blue-600 !text-white !border-none !px-4 !py-2.5 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                },
+                {
+                  extend: "colvis",
+                  text: "👁️ Columns",
+                  className:
+                    "!bg-gradient-to-r !from-purple-500 !to-indigo-600 !text-white !border-none !px-4 !py-2.5 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200 !ml-2",
                 },
               ]}
               className="w-full rounded-xl overflow-hidden"
               columns={[
+                {
+                  title: "SHIPMENT",
+                  data: "shipment",
+                  className: "font-medium",
+                },
                 {
                   title: "CUSTOMER MARK",
                   data: "customerName",
@@ -662,26 +759,31 @@ const App = () => {
                 row.className =
                   "hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 border-b border-gray-100 group";
               }}
-              headerCallback={(thead) => {
-                const ths = thead.querySelectorAll("th");
-                ths.forEach((th) => {
-                  // Apply gradient background
-                  th.style.setProperty(
-                    "background",
-                    "linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)",
-                    "important"
-                  );
-                  th.style.setProperty("background-image", "none", "important");
-                  th.style.setProperty("color", "#ffffff", "important");
-                  th.style.setProperty("border", "none", "important");
-                  th.style.setProperty(
-                    "box-shadow",
-                    "0 2px 4px rgba(0,0,0,0.1)",
-                    "important"
-                  );
-                  th.className =
-                    "text-xs font-bold uppercase tracking-wider px-6 py-4 border-r border-blue-400/30 first:rounded-tl-xl last:rounded-tr-xl whitespace-nowrap";
-                });
+              initComplete={() => {
+                // Apply background color to table header after initialization
+                setTimeout(() => {
+                  const ths = document.querySelectorAll("thead th");
+                  ths.forEach((th) => {
+                    th.style.background =
+                      "linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)";
+                    th.style.color = "#ffffff";
+                    th.style.border = "none";
+                    th.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+                    th.classList.add(
+                      "text-xs",
+                      "font-bold",
+                      "uppercase",
+                      "tracking-wider",
+                      "px-6",
+                      "py-4",
+                      "border-r",
+                      "border-blue-400/30",
+                      "first:rounded-tl-xl",
+                      "last:rounded-tr-xl",
+                      "whitespace-nowrap"
+                    );
+                  });
+                }, 100);
               }}
             />
           </div>
@@ -695,7 +797,7 @@ const App = () => {
                   <span>System Status: Active</span>
                 </div>
                 <p className="mt-2 text-white/60">
-                  Total Records: {normalRows.length} items
+                  Total Records: {tableData.length} items
                 </p>
               </div>
               <div className="mt-4 md:mt-0">
