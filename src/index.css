@@ -1,2 +1,82 @@
 @import "tailwindcss";
 
+
+
+/* Buttons */
+.dt-button {
+  background-color: #334155 !important;
+  color: #fff !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  border: none !important;
+  margin-right: 0.5rem !important;
+}
+
+/* Table layout fix */
+table.dataTable {
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
+
+/* Header */
+table.dataTable thead th {
+  background-color: #087287 !important;
+  color: white !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Header rounded corners */
+table.dataTable thead th:first-child {
+  border-top-left-radius: 0.75rem;
+}
+
+table.dataTable thead th:last-child {
+  border-top-right-radius: 0.75rem;
+}
+
+/* Row hover */
+table.dataTable tbody tr:hover {
+  background-color: #eff6ff !important;
+}
+
+/* Row bottom borders */
+table.dataTable tbody tr td {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+table.dataTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.dataTables_wrapper .dataTables_length {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.dataTables_wrapper .dataTables_length label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #334155;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid #cbd5f5 !important;
+  background-color: white !important;
+}
+
+/* Hide "Show" and "entries" text */
+.dataTables_wrapper .dataTables_length label {
+  font-size: 0;
+}
+
+/* Restore select visibility */
+.dataTables_wrapper .dataTables_length select {
+  font-size: 14px;
+}
