@@ -433,7 +433,6 @@ const App = () => {
       expressNo: "43469105989571",
       cbm: "",
     },
-    // Special row
     {
       isSpecialRow: true,
       specialText:
@@ -472,7 +471,6 @@ const App = () => {
       expressNo: "",
       cbm: "",
     },
-    // Special row
     {
       isSpecialRow: true,
       specialText:
@@ -499,80 +497,216 @@ const App = () => {
 
   useEffect(() => {
     if (!tableRef.current) return;
-
     const api = tableRef.current.dt();
 
     api.on("draw", () => {
       const tbody = api.table().body();
-
       specialRows.forEach((special) => {
         const tr = document.createElement("tr");
         const td = document.createElement("td");
-
         td.colSpan = 9;
         td.innerText = special.specialText;
         td.className = special.specialText.includes("yellow")
-          ? "bg-yellow-200 text-black font-semibold text-sm px-2 py-1"
-          : "bg-green-200 text-black font-semibold text-sm px-2 py-1";
+          ? "bg-yellow-100 text-yellow-800 font-bold text-xs px-4 py-3 border-y border-yellow-200 uppercase"
+          : "bg-green-100 text-green-800 font-bold text-xs px-4 py-3 border-y border-green-200 uppercase";
 
         tr.appendChild(td);
-        tbody.insertBefore(tr, tbody.children[special.index]);
+        if (tbody.children[special.index]) {
+          tbody.insertBefore(tr, tbody.children[special.index]);
+        }
       });
     });
   }, [specialRows]);
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
-      <h1 className="text-xl font-bold mb-4 text-center">
-        Warehouse Incoming Goods Report
-      </h1>
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 p-4 md:p-8 font-sans">
+      <div className="max-w-7xl mx-auto">
+        {/* Header with Gradient */}
+        <div className="mb-8 bg-linear-to-r from-[#005660] via-[#008594] to-[#01abc9] rounded-2xl shadow-2xl p-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-wider">
+                📦 Warehouse Incoming Report
+              </h1>
+              <div className="h-1.5 w-32 bg-linear-to-r from-cyan-400 to-pink-400 mt-4 rounded-full"></div>
+              <p className="text-blue-100 mt-4 text-lg">
+                Real-time tracking of all incoming shipments and inventory
+              </p>
+            </div>
+            <div className="mt-6 md:mt-0 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+              <div className="flex items-center gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white">
+                    {normalRows.length}
+                  </div>
+                  <div className="text-sm text-blue-100">Total Items</div>
+                </div>
+                <div className="h-8 w-px bg-white/30"></div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white">
+                    {specialRows.length}
+                  </div>
+                  <div className="text-sm text-blue-100">Special Notes</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div className="bg-white p-2 rounded shadow">
-        <DataTable
-          ref={tableRef}
-          data={normalRows}
-          paging
-          searching
-          ordering
-          responsive
-          dom="Bfrtip"
-          buttons={["copy", "csv", "excel", "pdf", "print"]}
-          className="display compact stripe w-full text-sm"
-          columns={[
-            { title: "CUSTOMER MARK", data: "customerName" },
-            { title: "CTN NO.", data: "ctnNo" },
-            { title: "GOODS NAME", data: "goodsName" },
-            { title: "CHINESE NAME", data: "chineseName" },
-            { title: "QTY", data: "goodsQty" },
-            { title: "UNIT", data: "unit" },
-            { title: "KGS", data: "weight" },
-            { title: "EXPRESS NO", data: "expressNo" },
-            { title: "CBM", data: "cbm" },
-          ]}
-          createdRow={(row) => {
-            row.classList.add("border", "border-gray-400", "text-center");
-          }}
-          headerCallback={(thead) => {
-            thead.querySelector("tr").style.background =
-              "linear-gradient(90deg, #1f2937, #374151)";
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-white/20">
+          <div className="h-2 bg-linear-to-r from-[#0891b2] via-[#008594] to-[#22d3ee]"></div>
 
-            thead.querySelectorAll("th").forEach((th) => {
-              th.className = `
-      text-white
-      text-xs
-      font-semibold
-      uppercase
-      tracking-wider
-      px-3
-      py-2
-      border
-      border-gray-600
-      text-center
-      whitespace-nowrap
-    `;
-            });
-          }}
-        />
+          {/* Table Content */}
+          <div className="p-6">
+            {/* Table Header with Info */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 p-4 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <div className="w-6 h-6 bg-linear-to-r from-blue-500 to-cyan-500 rounded"></div>
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-800">
+                    Incoming Goods Details
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    Interactive table with export capabilities
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 md:mt-0 text-sm text-gray-600 bg-white px-4 py-2 rounded-lg shadow">
+                <span className="font-medium">Last Updated:</span>{" "}
+                {new Date().toLocaleDateString()}{" "}
+                {new Date().toLocaleTimeString()}
+              </div>
+            </div>
+
+            {/* DataTable */}
+            <DataTable
+              ref={tableRef}
+              data={normalRows}
+              paging
+              searching
+              ordering
+              responsive
+              dom="<'flex flex-col md:flex-row md:items-center justify-between mb-6'Bf>rt<'flex flex-col md:flex-row md:items-center justify-between mt-6'ip>"
+              buttons={[
+                {
+                  extend: "copy",
+                  className:
+                    "!bg-gradient-to-r !from-slate-700 !to-slate-800 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                },
+                {
+                  extend: "excel",
+                  className:
+                    "!bg-gradient-to-r !from-emerald-500 !to-green-600 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                },
+                {
+                  extend: "pdf",
+                  className:
+                    "!bg-gradient-to-r !from-rose-500 !to-pink-600 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                },
+                {
+                  extend: "print",
+                  className:
+                    "!bg-gradient-to-r !from-sky-500 !to-blue-600 !text-white !border-none !px-5 !py-3 !rounded-lg !text-sm !font-semibold !shadow-md hover:!shadow-lg transition-all duration-200",
+                },
+              ]}
+              className="w-full rounded-xl overflow-hidden"
+              columns={[
+                {
+                  title: "CUSTOMER MARK",
+                  data: "customerName",
+                  className: "font-medium",
+                },
+                {
+                  title: "CTN NO.",
+                  data: "ctnNo",
+                  className: "font-mono",
+                },
+                {
+                  title: "GOODS NAME",
+                  data: "goodsName",
+                  className: "max-w-xs",
+                },
+                {
+                  title: "CHINESE NAME",
+                  data: "chineseName",
+                },
+                {
+                  title: "QTY",
+                  data: "goodsQty",
+                  className: "text-center font-bold",
+                },
+                {
+                  title: "UNIT",
+                  data: "unit",
+                  className: "text-center",
+                },
+                {
+                  title: "KGS",
+                  data: "weight",
+                  className: "text-center",
+                },
+                {
+                  title: "EXPRESS NO",
+                  data: "expressNo",
+                  className: "font-mono text-sm",
+                },
+                {
+                  title: "CBM",
+                  data: "cbm",
+                  className: "text-center",
+                },
+              ]}
+              createdRow={(row) => {
+                row.className =
+                  "hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 border-b border-gray-100 group";
+              }}
+              headerCallback={(thead) => {
+                const ths = thead.querySelectorAll("th");
+                ths.forEach((th) => {
+                  // Apply gradient background
+                  th.style.setProperty(
+                    "background",
+                    "linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)",
+                    "important"
+                  );
+                  th.style.setProperty("background-image", "none", "important");
+                  th.style.setProperty("color", "#ffffff", "important");
+                  th.style.setProperty("border", "none", "important");
+                  th.style.setProperty(
+                    "box-shadow",
+                    "0 2px 4px rgba(0,0,0,0.1)",
+                    "important"
+                  );
+                  th.className =
+                    "text-xs font-bold uppercase tracking-wider px-6 py-4 border-r border-blue-400/30 first:rounded-tl-xl last:rounded-tr-xl whitespace-nowrap";
+                });
+              }}
+            />
+          </div>
+
+          {/* Footer */}
+          <div className="bg-linear-to-r from-slate-900 to-gray-900 p-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between">
+              <div className="text-white/80 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                  <span>System Status: Active</span>
+                </div>
+                <p className="mt-2 text-white/60">
+                  Total Records: {normalRows.length} items
+                </p>
+              </div>
+              <div className="mt-4 md:mt-0">
+                <div className="flex items-center gap-2 text-white/60 text-sm">
+                  <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                  <span>Warehouse Management System v2.0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
