@@ -1,17 +1,30 @@
-import React from "react";
-import {
-  FiPackage,
-  FiUsers,
-  FiTrendingUp,
-  FiHome,
-  FiCheckCircle,
-  FiUser,
-  FiBox,
-  FiTruck,
-} from "react-icons/fi";
+import React, { useEffect, useRef } from "react";
+import DataTable from "datatables.net-react";
+import DT from "datatables.net-dt";
+import Buttons from "datatables.net-buttons";
+import ButtonsDT from "datatables.net-buttons-dt";
+import Responsive from "datatables.net-responsive-dt";
+
+import "datatables.net-dt/css/dataTables.dataTables.css";
+import "datatables.net-buttons-dt/css/buttons.dataTables.css";
+
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons/js/buttons.print";
+
+import jszip from "jszip";
+import pdfMake from "pdfmake/build/pdfmake";
+import "pdfmake/build/vfs_fonts";
+
+window.JSZip = jszip;
+
+DataTable.use(DT);
+DataTable.use(Buttons);
+DataTable.use(ButtonsDT);
+DataTable.use(Responsive);
 
 const App = () => {
-  // JSON data exactly as per the image
+  const tableRef = useRef(null);
+
   const tableData = [
     {
       customerName: "PURPLE WAVE",
@@ -478,214 +491,88 @@ const App = () => {
     },
   ];
 
-  // Header data
-  const headers = [
-    { key: "customerName", label: "Customer Mark (用户名)" },
-    { key: "ctnNo", label: "CTN NO. (编号)" },
-    { key: "goodsName", label: "GOODS NAME (英文名称)" },
-    { key: "chineseName", label: "CHINESE NAME (中文名称)" },
-    { key: "goodsQty", label: "GOODS QTY" },
-    { key: "unit", label: "Unit" },
-    { key: "weight", label: "KGS (重量)" },
-    { key: "expressNo", label: "EXPRESS NUMBER (快递单号)" },
-    { key: "cbm", label: "CBM" },
-  ];
+  const normalRows = tableData.filter((row) => !row.isSpecialRow);
+
+  const specialRows = tableData
+    .map((row, index) => (row.isSpecialRow ? { ...row, index } : null))
+    .filter(Boolean);
+
+  useEffect(() => {
+    if (!tableRef.current) return;
+
+    const api = tableRef.current.dt();
+
+    api.on("draw", () => {
+      const tbody = api.table().body();
+
+      specialRows.forEach((special) => {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+
+        td.colSpan = 9;
+        td.innerText = special.specialText;
+        td.className = special.specialText.includes("yellow")
+          ? "bg-yellow-200 text-black font-semibold text-sm px-2 py-1"
+          : "bg-green-200 text-black font-semibold text-sm px-2 py-1";
+
+        tr.appendChild(td);
+        tbody.insertBefore(tr, tbody.children[special.index]);
+      });
+    });
+  }, [specialRows]);
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-cyan-50 to-white p-4 md:p-6">
-      <div className="max-w-450 mx-auto">
-        {/* Table Container */}
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-cyan-100">
-          {/* Table - Using proper table tags */}
-          <div className="max-h-150 overflow-y-auto">
-            <table className="w-full border-collapse">
-              {/* Table Header */}
-              <thead className="sticky top-0 z-10">
-                <tr className="bg-linear-to-r from-[#008594] to-[#0e7490]">
-                  {headers.map((header, index) => (
-                    <th
-                      key={index}
-                      className={`p-4 text-white font-bold text-center border-r border-white/20 last:border-r-0 ${
-                        index === 0 ? "text-left" : "text-center"
-                      }`}
-                    >
-                      {header.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
+    <div className="p-4 bg-gray-100 min-h-screen">
+      <h1 className="text-xl font-bold mb-4 text-center">
+        Warehouse Incoming Goods Report
+      </h1>
 
-              {/* Table Body */}
-              <tbody>
-                {tableData.map((row, index) => {
-                  if (row.isSpecialRow) {
-                    // Check if it's green mark
-                    const isGreenMark = row.specialText.includes("green mark");
-                    return (
-                      <tr
-                        key={index}
-                        className={`border-b ${
-                          isGreenMark
-                            ? "bg-green-50 border-green-200"
-                            : "bg-yellow-50 border-yellow-200"
-                        }`}
-                      >
-                        <td colSpan={headers.length} className="p-4">
-                          <div className="flex items-center gap-2">
-                            <div
-                              className={`h-3 w-3 rounded-full ${
-                                isGreenMark ? "bg-green-500" : "bg-yellow-500"
-                              }`}
-                            ></div>
-                            <span
-                              className={`font-semibold ${
-                                isGreenMark
-                                  ? "text-green-800"
-                                  : "text-yellow-800"
-                              }`}
-                            >
-                              {row.specialText}
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  }
+      <div className="bg-white p-2 rounded shadow">
+        <DataTable
+          ref={tableRef}
+          data={normalRows}
+          paging
+          searching
+          ordering
+          responsive
+          dom="Bfrtip"
+          buttons={["copy", "csv", "excel", "pdf", "print"]}
+          className="display compact stripe w-full text-sm"
+          columns={[
+            { title: "CUSTOMER MARK", data: "customerName" },
+            { title: "CTN NO.", data: "ctnNo" },
+            { title: "GOODS NAME", data: "goodsName" },
+            { title: "CHINESE NAME", data: "chineseName" },
+            { title: "QTY", data: "goodsQty" },
+            { title: "UNIT", data: "unit" },
+            { title: "KGS", data: "weight" },
+            { title: "EXPRESS NO", data: "expressNo" },
+            { title: "CBM", data: "cbm" },
+          ]}
+          createdRow={(row) => {
+            row.classList.add("border", "border-gray-400", "text-center");
+          }}
+          headerCallback={(thead) => {
+            thead.querySelector("tr").style.background =
+              "linear-gradient(90deg, #1f2937, #374151)";
 
-                  return (
-                    <tr
-                      key={index}
-                      className={`border-b border-gray-100 hover:bg-cyan-50/50 transition-colors duration-150 ${
-                        index % 2 === 0 ? "bg-gray-50/50" : "bg-white"
-                      }`}
-                    >
-                      {/* Customer Name */}
-                      <td className="p-4 border-r border-gray-100">
-                        <div className="flex items-center gap-2">
-                          <FiUser className="h-4 w-4 text-cyan-600" />
-                          <span className="font-semibold text-gray-800">
-                            {row.customerName}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* CTN No */}
-                      <td className="p-4 border-r border-gray-100 text-center">
-                        <div className="flex flex-col items-center justify-center">
-                          <span className="font-medium text-gray-700">
-                            {row.ctnNo}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Goods Name (English) */}
-                      <td className="p-4 border-r border-gray-100">
-                        <div className="flex items-start gap-2">
-                          <FiBox className="h-4 w-4 text-cyan-600 mt-1 shrink-0" />
-                          <span className="text-gray-700 wrap-break">
-                            {row.goodsName || "-"}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Chinese Name */}
-                      <td className="p-4 border-r border-gray-100">
-                        <span className="text-gray-700">
-                          {row.chineseName || "-"}
-                        </span>
-                      </td>
-
-                      {/* Goods Quantity */}
-                      <td className="p-4 border-r border-gray-100 text-center">
-                        <span className="font-medium text-gray-700">
-                          {row.goodsQty}
-                        </span>
-                      </td>
-
-                      {/* Unit */}
-                      <td className="p-4 border-r border-gray-100 text-center">
-                        <span className="font-medium text-gray-700 bg-cyan-100 px-2 py-1 rounded-lg">
-                          {row.unit}
-                        </span>
-                      </td>
-
-                      {/* Weight */}
-                      <td className="p-4 border-r border-gray-100 text-center">
-                        {row.weight ? (
-                          <span className="font-medium text-gray-700">
-                            {row.weight} KG
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </td>
-
-                      {/* Express Number */}
-                      <td className="p-4 border-r border-gray-100">
-                        <div className="flex items-center gap-2 justify-center">
-                          {row.expressNo ? (
-                            <>
-                              <FiTruck className="h-4 w-4 text-green-600" />
-                              <span className="font-medium text-gray-700">
-                                {row.expressNo}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-gray-400">-</span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* CBM Column */}
-                      <td className="p-4 text-center">
-                        <span className="font-medium text-gray-700">
-                          {row.cbm || "-"}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Table Footer */}
-          <div className="bg-linear-to-r from-cyan-50 to-blue-50 p-4 border-t border-cyan-100">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded-full bg-cyan-500"></div>
-                  <span className="text-sm text-gray-600">
-                    Total Records:{" "}
-                    {tableData.filter((item) => !item.isSpecialRow).length}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                  <span className="text-sm text-gray-600">
-                    Special Notes:{" "}
-                    {tableData.filter((item) => item.isSpecialRow).length}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                  <span className="text-sm text-gray-600">
-                    With Tracking:{" "}
-                    {
-                      tableData.filter(
-                        (item) => !item.isSpecialRow && item.expressNo
-                      ).length
-                    }
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FiCheckCircle className="h-4 w-4 text-green-500" />
-                Last Updated: {new Date().toLocaleDateString()}
-              </div>
-            </div>
-          </div>
-        </div>
+            thead.querySelectorAll("th").forEach((th) => {
+              th.className = `
+      text-white
+      text-xs
+      font-semibold
+      uppercase
+      tracking-wider
+      px-3
+      py-2
+      border
+      border-gray-600
+      text-center
+      whitespace-nowrap
+    `;
+            });
+          }}
+        />
       </div>
     </div>
   );
