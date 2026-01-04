@@ -22,7 +22,8 @@ table.dataTable {
 table.dataTable thead th {
   background-color: #087287 !important;
   color: white !important;
-  font-weight: 700;
+  font-weight: 500;
+  font-size: 12px;
   text-transform: uppercase;
   border-bottom: 2px solid #e5e7eb;
 }
@@ -44,6 +45,7 @@ table.dataTable tbody tr:hover {
 /* Row bottom borders */
 table.dataTable tbody tr td {
   border-bottom: 1px solid #e5e7eb;
+  font-size: 11px;
 }
 
 table.dataTable tbody tr:last-child td {

@@ -15,6 +15,8 @@ import "datatables.net-responsive-dt/css/responsive.dataTables.css";
 import jszip from "jszip";
 import pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 // Required for export functionality
 window.JSZip = jszip;
@@ -26,7 +28,85 @@ DataTable.use(Responsive);
 
 const App = () => {
   const tableRef = useRef(null);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editRow, setEditRow] = useState(null);
+
+  useEffect(() => {
+    const handleEditClick = (e) => {
+      const editBtn = e.target.closest(".action-edit");
+      if (!editBtn) return;
+
+      const rowEl = editBtn.closest("tr");
+      const rowData = tableRef.current.dt().row(rowEl).data();
+
+      setEditRow(rowData);
+      setIsEditOpen(true);
+    };
+
+    document.addEventListener("click", handleEditClick);
+    return () => document.removeEventListener("click", handleEditClick);
+  }, []);
+
+  useEffect(() => {
+    const handleDeleteClick = (e) => {
+      const deleteBtn = e.target.closest(".action-delete");
+      if (!deleteBtn) return;
+
+      const rowEl = deleteBtn.closest("tr");
+      const rowData = tableRef.current.dt().row(rowEl).data();
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "This record will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#2563eb",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("Deleting row:", rowData);
+
+          // Example (only if you already do this):
+          // tableRef.current.dt().row(rowEl).remove().draw();
+
+          Swal.fire({
+            icon: "success",
+            title: "Deleted!",
+            text: "The record has been deleted.",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      });
+    };
+
+    document.addEventListener("click", handleDeleteClick);
+    return () => document.removeEventListener("click", handleDeleteClick);
+  }, []);
+
+  const [columnSearch, setColumnSearch] = useState({
+    shipment: "",
+    customerName: "",
+    ctnNo: "",
+    goodsName: "",
+    expressNo: "",
+  });
+
+  useEffect(() => {
+    if (!tableRef.current) return;
+    const api = tableRef.current.dt();
+
+    api.column(0).search(columnSearch.shipment);
+    api.column(1).search(columnSearch.customerName);
+    api.column(2).search(columnSearch.ctnNo);
+    api.column(3).search(columnSearch.goodsName);
+    api.column(8).search(columnSearch.expressNo);
+
+    api.draw();
+  }, [columnSearch]);
 
   const tableData = [
     {
@@ -40,6 +120,7 @@ const App = () => {
       weight: "6.5",
       expressNo: "31003470608",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -52,6 +133,7 @@ const App = () => {
       weight: "5.5",
       expressNo: "4648626022070",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -64,6 +146,7 @@ const App = () => {
       weight: "6",
       expressNo: "22736236230",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -76,6 +159,7 @@ const App = () => {
       weight: "189",
       expressNo: "",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -88,6 +172,7 @@ const App = () => {
       weight: "7.5",
       expressNo: "6106478936",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -100,6 +185,7 @@ const App = () => {
       weight: "5.5",
       expressNo: "000024646580",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -112,6 +198,7 @@ const App = () => {
       weight: "19",
       expressNo: "16826430077",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -124,6 +211,7 @@ const App = () => {
       weight: "5.25",
       expressNo: "",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -136,6 +224,7 @@ const App = () => {
       weight: "10.3",
       expressNo: "",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -148,6 +237,7 @@ const App = () => {
       weight: "15.5",
       expressNo: "90043441013",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -160,6 +250,7 @@ const App = () => {
       weight: "8.5",
       expressNo: "",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -172,6 +263,7 @@ const App = () => {
       weight: "6.35",
       expressNo: "",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -184,6 +276,7 @@ const App = () => {
       weight: "11.5",
       expressNo: "7895539075189",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -196,6 +289,7 @@ const App = () => {
       weight: "17",
       expressNo: "",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -208,6 +302,7 @@ const App = () => {
       weight: "11",
       expressNo: "",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -220,6 +315,7 @@ const App = () => {
       weight: "18",
       expressNo: "",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -232,6 +328,7 @@ const App = () => {
       weight: "16",
       expressNo: "",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -244,6 +341,7 @@ const App = () => {
       weight: "",
       expressNo: "773388493695419",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -256,6 +354,7 @@ const App = () => {
       weight: "",
       expressNo: "4946761800802",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -268,6 +367,7 @@ const App = () => {
       weight: "",
       expressNo: "49165238239",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -280,6 +380,7 @@ const App = () => {
       weight: "",
       expressNo: "7733860514745",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -292,6 +393,7 @@ const App = () => {
       weight: "",
       expressNo: "02524764250",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -304,6 +406,7 @@ const App = () => {
       weight: "",
       expressNo: "783576548339",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -316,6 +419,7 @@ const App = () => {
       weight: "",
       expressNo: "46491951645762",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -328,6 +432,7 @@ const App = () => {
       weight: "",
       expressNo: "7733875829576",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -340,6 +445,7 @@ const App = () => {
       weight: "",
       expressNo: "390659361119",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -352,6 +458,7 @@ const App = () => {
       weight: "",
       expressNo: "31045928991",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -364,6 +471,7 @@ const App = () => {
       weight: "",
       expressNo: "",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -376,6 +484,7 @@ const App = () => {
       weight: "",
       expressNo: "759090209462",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -388,6 +497,7 @@ const App = () => {
       weight: "",
       expressNo: "789557867447",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -400,6 +510,7 @@ const App = () => {
       weight: "",
       expressNo: "4843201956300",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -412,6 +523,7 @@ const App = () => {
       weight: "",
       expressNo: "7895434650500",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -424,6 +536,7 @@ const App = () => {
       weight: "",
       expressNo: "77338758396561",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -436,6 +549,7 @@ const App = () => {
       weight: "15",
       expressNo: "006833585",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -448,6 +562,7 @@ const App = () => {
       weight: "",
       expressNo: "763350807563",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -460,6 +575,7 @@ const App = () => {
       weight: "7",
       expressNo: "391622146338",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -472,6 +588,7 @@ const App = () => {
       weight: "",
       expressNo: "43469105989571",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -484,6 +601,7 @@ const App = () => {
       weight: "50",
       expressNo: "364888899371",
       cbm: "0.20",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -496,6 +614,7 @@ const App = () => {
       weight: "23.5",
       expressNo: "0099915",
       cbm: "",
+      status: "Delivered",
     },
     {
       shipment: "",
@@ -508,6 +627,7 @@ const App = () => {
       weight: "5.5",
       expressNo: "",
       cbm: "",
+      status: "Pending",
     },
     {
       shipment: "",
@@ -520,27 +640,31 @@ const App = () => {
       weight: "6.5",
       expressNo: "77338512738370",
       cbm: "",
+      status: "Delivered",
     },
   ];
 
-  // Handle search term changes
-  useEffect(() => {
-    if (!tableRef.current) return;
-    const api = tableRef.current.dt();
-    api.search(searchTerm).draw();
-  }, [searchTerm]);
+  // Calculate stats dynamically
+  const totalQty = tableData.reduce((acc, item) => {
+    const qty = parseFloat(item.goodsQty) || 0;
+    return acc + qty;
+  }, 0);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const totalWeight = tableData.reduce((acc, item) => {
+    const w = parseFloat(item.weight) || 0;
+    return acc + w;
+  }, 0);
 
-  const handleClearSearch = () => {
-    setSearchTerm("");
-  };
+  const totalDelivered = tableData.filter(
+    (item) => item.status === "Delivered"
+  ).length;
+  const totalPending = tableData.filter(
+    (item) => item.status === "Pending"
+  ).length;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 p-4 md:p-8 font-sans">
-      <div className="max-w-350 mx-auto">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 p-4 font-sans">
+      <div className="max-w-400 mx-auto">
         <div className="mb-8 bg-linear-to-r from-[#005660] via-[#008594] to-[#01abc9] rounded-2xl shadow-2xl p-8 text-white">
           <div className="flex flex-col md:flex-row md:items-center justify-between">
             <div>
@@ -567,46 +691,111 @@ const App = () => {
         </div>
 
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20">
-          <div className="h-2 bg-linear-to-r from-[#0891b2] via-[#008594] to-[#22d3ee]"></div>
+          <div className="h-1 rounded-t-full bg-linear-to-r from-[#0891b2] via-[#008594] to-[#22d3ee]"></div>
           <div className="p-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 p-4 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <div className="w-6 h-6 bg-blue-500 rounded"></div>
+            <div className="my-6 md:mt-0 grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
+                <div className="text-2xl font-bold text-blue-600">
+                  {totalQty}
                 </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-800">
-                    Incoming Goods Details
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    Interactive table with export capabilities
-                  </p>
-                </div>
+                <div className="text-sm text-blue-100">Total Quantity</div>
               </div>
-              <div className="mt-4 md:mt-0 text-sm text-gray-600 bg-white px-4 py-2 rounded-lg shadow">
-                <span className="font-medium">Last Updated:</span>{" "}
-                {new Date().toLocaleString()}
+
+              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
+                <div className="text-2xl font-bold text-emerald-600">
+                  {totalWeight}
+                </div>
+                <div className="text-sm text-emerald-100">Total Weight</div>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
+                <div className="text-2xl font-bold text-green-600">
+                  {totalDelivered}
+                </div>
+                <div className="text-sm text-green-100">Delivered</div>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
+                <div className="text-2xl font-bold text-amber-600">
+                  {totalPending}
+                </div>
+                <div className="text-sm text-amber-100">Pending</div>
               </div>
             </div>
 
-            <div className="mb-6 relative group">
-              <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-purple-500 rounded-2xl blur opacity-25"></div>
-              <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 p-4 flex items-center">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  placeholder="Search across all columns..."
-                  className="w-full px-4 py-3 text-gray-700 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {searchTerm && (
-                  <button
-                    onClick={handleClearSearch}
-                    className="ml-4 px-4 py-2 bg-red-500 text-white rounded-lg font-medium"
-                  >
-                    Clear
-                  </button>
-                )}
+            <div className="mb-6">
+              <div className="bg-blue-50 rounded-xl border border-gray-200 px-3 py-3 w-4xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-1.5">
+                  <input
+                    type="text"
+                    placeholder="Shipment"
+                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+        placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
+                    value={columnSearch.shipment}
+                    onChange={(e) =>
+                      setColumnSearch({
+                        ...columnSearch,
+                        shipment: e.target.value,
+                      })
+                    }
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Customer Mark"
+                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+        placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
+                    value={columnSearch.customerName}
+                    onChange={(e) =>
+                      setColumnSearch({
+                        ...columnSearch,
+                        customerName: e.target.value,
+                      })
+                    }
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="CTN No"
+                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+        placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
+                    value={columnSearch.ctnNo}
+                    onChange={(e) =>
+                      setColumnSearch({
+                        ...columnSearch,
+                        ctnNo: e.target.value,
+                      })
+                    }
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Goods Name"
+                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+        placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
+                    value={columnSearch.goodsName}
+                    onChange={(e) =>
+                      setColumnSearch({
+                        ...columnSearch,
+                        goodsName: e.target.value,
+                      })
+                    }
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Express No"
+                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+        placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
+                    value={columnSearch.expressNo}
+                    onChange={(e) =>
+                      setColumnSearch({
+                        ...columnSearch,
+                        expressNo: e.target.value,
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
 
@@ -614,7 +803,7 @@ const App = () => {
               ref={tableRef}
               data={tableData}
               paging
-              searching={true}
+              searching={false}
               ordering
               responsive
               options={{
@@ -678,14 +867,74 @@ const App = () => {
                   data: "goodsQty",
                   className: "text-center font-bold",
                 },
-                { title: "UNIT", data: "unit", className: "text-center" },
-                { title: "KGS", data: "weight", className: "text-center" },
+                { title: "UNIT", data: "unit", className: "" },
+                { title: "KGS", data: "weight", className: "" },
                 {
                   title: "EXPRESS NO",
                   data: "expressNo",
                   className: "font-mono text-sm",
                 },
-                { title: "CBM", data: "cbm", className: "text-center" },
+                { title: "CBM", data: "cbm", className: "" },
+                {
+                  title: "STATUS",
+                  data: "status",
+                  className: "",
+                  render: (data) => {
+                    const isDelivered = data === "Delivered";
+
+                    return `
+      <span class="
+        inline-flex items-center px-2 py-1 rounded-full text-xs
+        ${
+          isDelivered
+            ? "bg-emerald-100 text-emerald-700"
+            : "bg-amber-100 text-amber-700"
+        }
+      ">
+        ${data}
+      </span>
+    `;
+                  },
+                },
+
+                {
+                  title: "ACTION",
+                  data: null,
+                  orderable: false,
+                  searchable: false,
+                  className: "text-center",
+                  render: () => {
+                    return `
+      <div class="flex items-center justify-center gap-2">
+        <button
+          class="action-edit inline-flex items-center justify-center w-8 h-8 rounded-md
+                 bg-blue-50 text-blue-600 hover:bg-blue-100 transition"
+          title="Edit"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+          </svg>
+        </button>
+
+        <button
+          class="action-delete inline-flex items-center justify-center w-8 h-8 rounded-md
+                 bg-red-50 text-red-600 hover:bg-red-100 transition"
+          title="Delete"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862
+                 a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0
+                 a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+          </svg>
+        </button>
+      </div>
+    `;
+                  },
+                },
               ]}
               createdRow={(row) => {
                 row.className =
@@ -713,6 +962,54 @@ const App = () => {
           </div>
         </div>
       </div>
+
+      {isEditOpen && editRow && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl p-6">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">
+              ✏️ Edit Entry Info
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {Object.keys(editRow).map((key) => (
+                <div key={key}>
+                  <label className="text-xs font-semibold text-gray-500 uppercase">
+                    {key}
+                  </label>
+                  <input
+                    type="text"
+                    value={editRow[key]}
+                    onChange={(e) =>
+                      setEditRow({ ...editRow, [key]: e.target.value })
+                    }
+                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm
+                         focus:outline-none focus:border-blue-400"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => setIsEditOpen(false)}
+                className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => {
+                  console.log("Updated Data:", editRow);
+                  setIsEditOpen(false);
+                }}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
