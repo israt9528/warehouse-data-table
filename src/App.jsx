@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import DataTable from "datatables.net-react";
 import DT from "datatables.net-dt";
 import Buttons from "datatables.net-buttons-dt";
+import Select from "datatables.net-select-dt";
+import "datatables.net-select-dt/css/select.dataTables.css";
 import "datatables.net-buttons-dt";
 import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-buttons/js/buttons.print";
@@ -25,6 +27,7 @@ window.pdfMake = pdfMake;
 DataTable.use(DT);
 DataTable.use(Buttons);
 DataTable.use(Responsive);
+DataTable.use(Select);
 
 const App = () => {
   const tableRef = useRef(null);
@@ -650,10 +653,11 @@ const App = () => {
     return acc + qty;
   }, 0);
 
-  const totalWeight = tableData.reduce((acc, item) => {
-    const w = parseFloat(item.weight) || 0;
-    return acc + w;
-  }, 0);
+  const totalWeight = Number(
+    tableData
+      .reduce((acc, item) => acc + (parseFloat(item.weight) || 0), 0)
+      .toFixed(3)
+  );
 
   const totalDelivered = tableData.filter(
     (item) => item.status === "Delivered"
@@ -661,6 +665,46 @@ const App = () => {
   const totalPending = tableData.filter(
     (item) => item.status === "Pending"
   ).length;
+
+  const handleCreateInvoice = () => {
+    const table = tableRef.current.dt();
+    const selectedData = table.rows({ selected: true }).data().toArray();
+
+    if (selectedData.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "No rows selected",
+        text: "Please select at least one row to create an invoice.",
+      });
+      return;
+    }
+
+    const firstCustomer = selectedData[0].customerName;
+
+    const isSameCustomer = selectedData.every(
+      (row) => row.customerName === firstCustomer
+    );
+
+    if (!isSameCustomer) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Selection",
+        text: "Invoice can only be created for the same Customer Mark. Please select rows with the same customer.",
+      });
+      return;
+    }
+
+    //  PROCEED NEXT
+    Swal.fire({
+      icon: "success",
+      title: "Valid Selection",
+      text: `Invoice will be created for "${firstCustomer}".`,
+    });
+
+    console.log("Invoice Data:", selectedData);
+
+    // navigate / open modal / API call
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 p-4 font-sans">
@@ -693,109 +737,145 @@ const App = () => {
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20">
           <div className="h-1 rounded-t-full bg-linear-to-r from-[#0891b2] via-[#008594] to-[#22d3ee]"></div>
           <div className="p-6">
-            <div className="my-6 md:mt-0 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
-                <div className="text-2xl font-bold text-blue-600">
-                  {totalQty}
+            <div className="my-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {/* Total Quantity */}
+              <div className="group relative overflow-hidden rounded-2xl bg-white border border-blue-200 shadow-blue-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="absolute top-0 right-0 h-24 w-24 bg-blue-100 rounded-full -mr-12 -mt-12 transition-transform duration-300 group-hover:scale-110"></div>
+                <div className="relative">
+                  <p className="text-xs uppercase tracking-wide text-gray-400">
+                    Total Quantity
+                  </p>
+                  <p className="mt-2 text-3xl sm:text-4xl font-extrabold text-blue-600">
+                    {totalQty}
+                  </p>
                 </div>
-                <div className="text-sm text-blue-100">Total Quantity</div>
               </div>
 
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
-                <div className="text-2xl font-bold text-emerald-600">
-                  {totalWeight}
+              {/* Total Weight */}
+              <div className="group relative overflow-hidden rounded-2xl bg-white border border-emerald-200 shadow-emerald-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="absolute top-0 right-0 h-24 w-24 bg-emerald-100 rounded-full -mr-12 -mt-12 transition-transform duration-300 group-hover:scale-110"></div>
+                <div className="relative">
+                  <p className="text-xs uppercase tracking-wide text-gray-400">
+                    Total Weight (KG)
+                  </p>
+                  <p className="mt-2 text-3xl sm:text-4xl font-extrabold text-emerald-600">
+                    {totalWeight}
+                  </p>
                 </div>
-                <div className="text-sm text-emerald-100">Total Weight</div>
               </div>
 
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
-                <div className="text-2xl font-bold text-green-600">
-                  {totalDelivered}
+              {/* Delivered */}
+              <div className="group relative overflow-hidden rounded-2xl bg-white border border-green-200 shadow-green-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="absolute top-0 right-0 h-24 w-24 bg-green-100 rounded-full -mr-12 -mt-12 transition-transform duration-300 group-hover:scale-110"></div>
+                <div className="relative">
+                  <p className="text-xs uppercase tracking-wide text-gray-400">
+                    Total Delivered
+                  </p>
+                  <p className="mt-2 text-3xl sm:text-4xl font-extrabold text-green-600">
+                    {totalDelivered}
+                  </p>
                 </div>
-                <div className="text-sm text-green-100">Delivered</div>
               </div>
 
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center shadow-lg">
-                <div className="text-2xl font-bold text-amber-600">
-                  {totalPending}
+              {/* Pending */}
+              <div className="group relative overflow-hidden rounded-2xl bg-white border border-amber-200 shadow-amber-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="absolute top-0 right-0 h-24 w-24 bg-amber-100 rounded-full -mr-12 -mt-12 transition-transform duration-300 group-hover:scale-110"></div>
+                <div className="relative">
+                  <p className="text-xs uppercase tracking-wide text-gray-400">
+                    Total Pending
+                  </p>
+                  <p className="mt-2 text-3xl sm:text-4xl font-extrabold text-amber-600">
+                    {totalPending}
+                  </p>
                 </div>
-                <div className="text-sm text-amber-100">Pending</div>
               </div>
             </div>
 
-            <div className="mb-6">
-              <div className="bg-blue-50 rounded-xl border border-gray-200 px-3 py-3 w-4xl">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-1.5">
-                  <input
-                    type="text"
-                    placeholder="Shipment"
-                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+            <div className="flex justify-between items-center">
+              <div className="mb-6">
+                <div className="bg-blue-50 rounded-xl border border-gray-200 px-3 py-3 w-4xl">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-1.5">
+                    <input
+                      type="text"
+                      placeholder="Shipment"
+                      className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
         placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
-                    value={columnSearch.shipment}
-                    onChange={(e) =>
-                      setColumnSearch({
-                        ...columnSearch,
-                        shipment: e.target.value,
-                      })
-                    }
-                  />
+                      value={columnSearch.shipment}
+                      onChange={(e) =>
+                        setColumnSearch({
+                          ...columnSearch,
+                          shipment: e.target.value,
+                        })
+                      }
+                    />
 
-                  <input
-                    type="text"
-                    placeholder="Customer Mark"
-                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+                    <input
+                      type="text"
+                      placeholder="Customer Mark"
+                      className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
         placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
-                    value={columnSearch.customerName}
-                    onChange={(e) =>
-                      setColumnSearch({
-                        ...columnSearch,
-                        customerName: e.target.value,
-                      })
-                    }
-                  />
+                      value={columnSearch.customerName}
+                      onChange={(e) =>
+                        setColumnSearch({
+                          ...columnSearch,
+                          customerName: e.target.value,
+                        })
+                      }
+                    />
 
-                  <input
-                    type="text"
-                    placeholder="CTN No"
-                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+                    <input
+                      type="text"
+                      placeholder="CTN No"
+                      className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
         placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
-                    value={columnSearch.ctnNo}
-                    onChange={(e) =>
-                      setColumnSearch({
-                        ...columnSearch,
-                        ctnNo: e.target.value,
-                      })
-                    }
-                  />
+                      value={columnSearch.ctnNo}
+                      onChange={(e) =>
+                        setColumnSearch({
+                          ...columnSearch,
+                          ctnNo: e.target.value,
+                        })
+                      }
+                    />
 
-                  <input
-                    type="text"
-                    placeholder="Goods Name"
-                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+                    <input
+                      type="text"
+                      placeholder="Goods Name"
+                      className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
         placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
-                    value={columnSearch.goodsName}
-                    onChange={(e) =>
-                      setColumnSearch({
-                        ...columnSearch,
-                        goodsName: e.target.value,
-                      })
-                    }
-                  />
+                      value={columnSearch.goodsName}
+                      onChange={(e) =>
+                        setColumnSearch({
+                          ...columnSearch,
+                          goodsName: e.target.value,
+                        })
+                      }
+                    />
 
-                  <input
-                    type="text"
-                    placeholder="Express No"
-                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
+                    <input
+                      type="text"
+                      placeholder="Express No"
+                      className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white
         placeholder-gray-400 focus:outline-none focus:border-blue-300 transition"
-                    value={columnSearch.expressNo}
-                    onChange={(e) =>
-                      setColumnSearch({
-                        ...columnSearch,
-                        expressNo: e.target.value,
-                      })
-                    }
-                  />
+                      value={columnSearch.expressNo}
+                      onChange={(e) =>
+                        setColumnSearch({
+                          ...columnSearch,
+                          expressNo: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
                 </div>
+              </div>
+
+              <div className="mb-6 ">
+                <button
+                  onClick={handleCreateInvoice}
+                  className="px-3 py-2 rounded-lg bg-indigo-600 text-white font-semibold
+               hover:bg-indigo-700 transition shadow-md"
+                >
+                  🧾 Create Invoice
+                </button>
               </div>
             </div>
 
@@ -807,34 +887,37 @@ const App = () => {
               ordering
               responsive
               options={{
+                select: {
+                  style: "multi", // ✅ multiple row selection
+                },
                 lengthChange: true, // ✅ enable entries per page
                 pageLength: 10, // default rows per page
                 lengthMenu: [5, 10, 25, 50, 100],
-                dom: '<"flex flex-wrap justify-between items-center mb-4"lB>rtip',
+                dom: '<"flex flex-wrap justify-between items-center mb-4"lB>rt<"flex justify-end mt-4"p>i',
                 buttons: [
                   {
                     extend: "copy",
                     text: "📋 Copy",
                     className:
-                      "!bg-slate-700 !text-white !rounded-lg !px-4 !py-2 !mr-2 !border-none",
+                      "!bg-slate-700 !text-white !rounded-lg !px-4 !py-2 !mr-1 !border-none",
                   },
                   {
                     extend: "excel",
                     text: "📊 Excel",
                     className:
-                      "!bg-emerald-600 !text-white !rounded-lg !px-4 !py-2 !mr-2 !border-none",
+                      "!bg-emerald-600 !text-white !rounded-lg !px-4 !py-2 !mr-1 !border-none",
                   },
                   {
                     extend: "pdf",
                     text: "📄 PDF",
                     className:
-                      "!bg-rose-600 !text-white !rounded-lg !px-4 !py-2 !mr-2 !border-none",
+                      "!bg-rose-600 !text-white !rounded-lg !px-4 !py-2 !mr-1 !border-none",
                   },
                   {
                     extend: "print",
                     text: "🖨️ Print",
                     className:
-                      "!bg-sky-600 !text-white !rounded-lg !px-4 !py-2 !mr-2 !border-none",
+                      "!bg-sky-600 !text-white !rounded-lg !px-4 !py-2 !mr-1 !border-none",
                   },
                   {
                     extend: "colvis",

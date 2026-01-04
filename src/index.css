@@ -52,33 +52,76 @@ table.dataTable tbody tr:last-child td {
   border-bottom: none;
 }
 
+/* ===============================
+   DATA TABLES FIXED OVERRIDES
+   =============================== */
+
+/* LENGTH DROPDOWN */
 .dataTables_wrapper .dataTables_length {
   display: flex !important;
   align-items: center;
   gap: 0.5rem;
-  font-weight: 500;
 }
 
 .dataTables_wrapper .dataTables_length label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #334155;
+  font-size: 0 !important; /* hide text */
 }
 
 .dataTables_wrapper .dataTables_length select {
-  padding: 0.35rem 0.75rem !important;
-  border-radius: 0.5rem !important;
-  border: 1px solid #cbd5f5 !important;
-  background-color: white !important;
+  font-size: 14px !important;
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+  border: 1px solid #c7d2fe !important;
+  background: #ffffff !important;
+  cursor: pointer;
 }
 
-/* Hide "Show" and "entries" text */
-.dataTables_wrapper .dataTables_length label {
-  font-size: 0;
+/* ===============================
+   ROW SELECTION (DT v2 FIX)
+   =============================== */
+
+table.dataTable tbody tr.selected > *,
+table.dataTable tbody tr.dt-row-selected > * {
+  background-color: #dbeafe !important;
+  color: #1e3a8a !important;
 }
 
-/* Restore select visibility */
-.dataTables_wrapper .dataTables_length select {
-  font-size: 14px;
+/* ===============================
+   PAGINATION ALIGN RIGHT
+   =============================== */
+
+.dataTables_wrapper .dataTables_paginate {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+/* PAGINATION BUTTONS */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  background: #e0e7ff !important;
+  color: #1e3a8a !important;
+  border: none !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+}
+
+/* HOVER */
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: #6366f1 !important;
+  color: #ffffff !important;
+}
+
+/* ACTIVE */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+}
+
+/* DISABLED */
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
 }
