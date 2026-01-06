@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
-
-
-/* Buttons */
+/* Keep your existing button styles */
 .dt-button {
   background-color: #334155 !important;
   color: #fff !important;
@@ -12,13 +10,13 @@
   margin-right: 0.5rem !important;
 }
 
-/* Table layout fix */
+/* Existing Table layout fix */
 table.dataTable {
   border-collapse: separate !important;
   border-spacing: 0;
 }
 
-/* Header */
+/* Existing Header styles */
 table.dataTable thead th {
   background-color: #087287 !important;
   color: white !important;
@@ -28,100 +26,205 @@ table.dataTable thead th {
   border-bottom: 2px solid #e5e7eb;
 }
 
-/* Header rounded corners */
-table.dataTable thead th:first-child {
-  border-top-left-radius: 0.75rem;
-}
+/* Existing Header rounded corners */
+table.dataTable thead th:first-child { border-top-left-radius: 0.75rem; }
+table.dataTable thead th:last-child { border-top-right-radius: 0.75rem; }
 
-table.dataTable thead th:last-child {
-  border-top-right-radius: 0.75rem;
-}
+/* Existing Row hover & border */
+table.dataTable tbody tr:hover { background-color: #eff6ff !important; }
+table.dataTable tbody tr td { border-bottom: 1px solid #e5e7eb; font-size: 11px; }
+table.dataTable tbody tr:last-child td { border-bottom: none; }
 
-/* Row hover */
-table.dataTable tbody tr:hover {
-  background-color: #eff6ff !important;
-}
-
-/* Row bottom borders */
-table.dataTable tbody tr td {
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 11px;
-}
-
-table.dataTable tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* ===============================
-   DATA TABLES FIXED OVERRIDES
-   =============================== */
-
-/* LENGTH DROPDOWN */
-.dataTables_wrapper .dataTables_length {
-  display: flex !important;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.dataTables_wrapper .dataTables_length label {
-  font-size: 0 !important; /* hide text */
-}
-
+/* Existing Length dropdown fix */
+.dataTables_wrapper .dataTables_length { display: flex !important; align-items: center; gap: 0.5rem; }
+.dataTables_wrapper .dataTables_length label { font-size: 0 !important; }
 .dataTables_wrapper .dataTables_length select {
   font-size: 14px !important;
   padding: 6px 10px !important;
   border-radius: 8px !important;
   border: 1px solid #c7d2fe !important;
   background: #ffffff !important;
-  cursor: pointer;
 }
 
-/* ===============================
-   ROW SELECTION (DT v2 FIX)
-   =============================== */
+/* ============================================================
+   NEW PAGINATION OVERRIDE (USE THIS EXACT SECTION)
+   ============================================================ */
 
-table.dataTable tbody tr.selected > *,
-table.dataTable tbody tr.dt-row-selected > * {
-  background-color: #dbeafe !important;
-  color: #1e3a8a !important;
+/* 1. Target the container and the internal span */
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_paginate span {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
 }
 
-/* ===============================
-   PAGINATION ALIGN RIGHT
-   =============================== */
-
-.dataTables_wrapper .dataTables_paginate {
-  display: flex !important;
-  justify-content: flex-end !important;
-  gap: 6px;
-  margin-top: 1rem;
-}
-
-/* PAGINATION BUTTONS */
+/* 2. Reset the buttons and remove the library's gray gradient */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-  padding: 6px 12px !important;
-  border-radius: 8px !important;
-  background: #e0e7ff !important;
-  color: #1e3a8a !important;
-  border: none !important;
-  font-weight: 600 !important;
-  cursor: pointer;
+    background-image: none !important; /* This removes the default gray gradient */
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #374151 !important;
+    border-radius: 6px !important;
+    padding: 5px 12px !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: none !important;
 }
 
-/* HOVER */
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  background: #6366f1 !important;
-  color: #ffffff !important;
+/* 3. Style the Active (Current) page */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background-color: #4f46e5 !important; /* Indigo color */
+    background-image: none !important;
+    color: white !important;
+    border-color: #4f46e5 !important;
 }
 
-/* ACTIVE */
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-  background: #4f46e5 !important;
-  color: #ffffff !important;
+/* 4. Style the Hover state for other buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled) {
+    background-color: #f3f4f6 !important;
+    background-image: none !important;
+    color: #111827 !important;
+    border-color: #9ca3af !important;
 }
 
-/* DISABLED */
+/* 5. Style the Disabled state (Prev/Next) */
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-  opacity: 0.4 !important;
-  cursor: not-allowed !important;
+    background-color: #f9fafb !important;
+    color: #9ca3af !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+    border-color: #e5e7eb !important;
+}
+
+/* ============================================================
+   THE ABSOLUTE FINAL PAGINATION OVERRIDE
+   ============================================================ */
+
+/* We use the tag name 'a' and 'span' to ensure we beat the library's internal CSS */
+.dataTables_wrapper .dataTables_paginate  {
+    padding-top: 1.5rem !important;
+}
+
+/* This selector targets the specific tags DataTables generates */
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate a.paginate_button,
+.dataTables_wrapper .dataTables_paginate span .paginate_button {
+    background-image: none !important; /* REMOVES DEFAULT GRAY GRADIENT */
+    background-color: #ffffff !important;
+    color: #4b5563 !important; /* gray-600 */
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    padding: 6px 14px !important;
+    margin: 0 2px !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+}
+
+/* ACTIVE / CURRENT PAGE */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate a.paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background-color: #4f46e5 !important; /* Indigo color */
+    background-image: none !important;
+    color: white !important;
+    border-color: #4f46e5 !important;
+    font-weight: 600 !important;
+}
+
+/* HOVER FOR CLICKABLE BUTTONS */
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled),
+.dataTables_wrapper .dataTables_paginate a.paginate_button:hover:not(.current):not(.disabled) {
+    background-color: #f3f4f6 !important;
+    background-image: none !important;
+    color: #111827 !important;
+    border-color: #d1d5db !important;
+}
+
+/* DISABLED (PREV/NEXT) */
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate a.paginate_button.disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    background-color: #f9fafb !important;
+    color: #9ca3af !important;
+    border-color: #f3f4f6 !important;
+}
+
+/* Target the numeric container to ensure flex alignment */
+.dataTables_wrapper .dataTables_paginate span {
+    display: inline-flex !important;
+    gap: 4px !important;
+}
+
+
+
+
+
+/* 1. Container alignment */
+div.dt-container .dt-paging {
+    display: flex !important;
+    gap: 6px !important;
+    justify-content: flex-end !important;
+    margin-top: 1.5rem !important;
+    align-items: center !important;
+}
+
+/* 2. Base button style (Inactive) */
+div.dt-container .dt-paging .dt-paging-button {
+    all: unset !important; /* Strips library defaults */
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    /* Visuals */
+    background-color: #ffffff !important;
+    background-image: none !important; /* Removes the grey gradient from inspector */
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    
+    /* Sizing */
+    min-width: 38px !important;
+    height: 38px !important;
+    padding: 0 14px !important;
+    margin-right: 3px !important;
+    
+    /* Typography */
+    color: #4b5563 !important; 
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* 3. HOVER State for inactive buttons */
+div.dt-container .dt-paging .dt-paging-button:hover:not(.current):not(.disabled) {
+    background-color: #f0fdfa !important; /* Very light teal bg */
+    background-image: none !important;
+    color: #087287 !important; /* Teal text */
+    border-color: #087287 !important; /* Teal border */
+}
+
+/* 4. ACTIVE (Current) Page style */
+div.dt-container .dt-paging .dt-paging-button.current {
+    background-color: #087287 !important; /* Teal background */
+    background-image: none !important;
+    color: #ffffff !important;
+    border-color: #087287 !important;
+    font-weight: 600 !important;
+}
+
+/* 5. DISABLED State (Previous/Next) */
+div.dt-container .dt-paging .dt-paging-button.disabled {
+    cursor: not-allowed !important;
+    opacity: 0.4 !important;
+    background-color: #f9fafb !important;
+    color: #9ca3af !important;
+    border-color: #f3f4f6 !important;
 }
