@@ -124,6 +124,7 @@ const App = () => {
       expressNo: "31003470608",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "568",
     },
     {
       shipment: "",
@@ -137,6 +138,7 @@ const App = () => {
       expressNo: "4648626022070",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -150,6 +152,7 @@ const App = () => {
       expressNo: "22736236230",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -163,6 +166,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -176,6 +180,7 @@ const App = () => {
       expressNo: "6106478936",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -189,6 +194,7 @@ const App = () => {
       expressNo: "000024646580",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -202,6 +208,7 @@ const App = () => {
       expressNo: "16826430077",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -215,6 +222,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -228,6 +236,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -241,6 +250,7 @@ const App = () => {
       expressNo: "90043441013",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -254,6 +264,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -267,6 +278,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -280,6 +292,7 @@ const App = () => {
       expressNo: "7895539075189",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -293,6 +306,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -306,6 +320,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -319,6 +334,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -332,6 +348,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -345,6 +362,7 @@ const App = () => {
       expressNo: "773388493695419",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -358,6 +376,7 @@ const App = () => {
       expressNo: "4946761800802",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -371,6 +390,7 @@ const App = () => {
       expressNo: "49165238239",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -384,6 +404,7 @@ const App = () => {
       expressNo: "7733860514745",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -397,6 +418,7 @@ const App = () => {
       expressNo: "02524764250",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -410,6 +432,7 @@ const App = () => {
       expressNo: "783576548339",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -423,6 +446,7 @@ const App = () => {
       expressNo: "46491951645762",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -436,6 +460,7 @@ const App = () => {
       expressNo: "7733875829576",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -449,6 +474,7 @@ const App = () => {
       expressNo: "390659361119",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -462,6 +488,7 @@ const App = () => {
       expressNo: "31045928991",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -475,6 +502,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -488,6 +516,7 @@ const App = () => {
       expressNo: "759090209462",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -501,6 +530,7 @@ const App = () => {
       expressNo: "789557867447",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -514,6 +544,7 @@ const App = () => {
       expressNo: "4843201956300",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -527,6 +558,7 @@ const App = () => {
       expressNo: "7895434650500",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -540,6 +572,7 @@ const App = () => {
       expressNo: "77338758396561",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -553,6 +586,7 @@ const App = () => {
       expressNo: "006833585",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -566,6 +600,7 @@ const App = () => {
       expressNo: "763350807563",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -579,6 +614,7 @@ const App = () => {
       expressNo: "391622146338",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -592,6 +628,7 @@ const App = () => {
       expressNo: "43469105989571",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -605,6 +642,7 @@ const App = () => {
       expressNo: "364888899371",
       cbm: "0.20",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -618,6 +656,7 @@ const App = () => {
       expressNo: "0099915",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -631,6 +670,7 @@ const App = () => {
       expressNo: "",
       cbm: "",
       status: "Pending",
+      invoiceNo: "",
     },
     {
       shipment: "",
@@ -644,6 +684,7 @@ const App = () => {
       expressNo: "77338512738370",
       cbm: "",
       status: "Delivered",
+      invoiceNo: "",
     },
   ];
 
@@ -874,7 +915,7 @@ const App = () => {
                   className="px-3 py-2 rounded-lg bg-indigo-600 text-white font-semibold
                hover:bg-indigo-700 transition shadow-md"
                 >
-                  🧾 Create Invoice
+                  🧾 Generate Invoice
                 </button>
               </div>
             </div>
@@ -958,6 +999,18 @@ const App = () => {
                   className: "font-mono text-sm",
                 },
                 { title: "CBM", data: "cbm", className: "" },
+                {
+                  title: "INVOICE",
+                  data: "invoiceNo", // Assumes your data objects might have this key
+                  className: "font-mono text-xs text-blue-600 font-bold",
+                  render: (data) => {
+                    // If data exists, show it; otherwise show a placeholder or "Pending"
+                    return data
+                      ? data
+                      : `<span class="text-gray-400">---</span>`;
+                  },
+                },
+
                 {
                   title: "STATUS",
                   data: "status",
@@ -1059,15 +1112,30 @@ const App = () => {
                   <label className="text-xs font-semibold text-gray-500 uppercase">
                     {key}
                   </label>
-                  <input
-                    type="text"
-                    value={editRow[key]}
-                    onChange={(e) =>
-                      setEditRow({ ...editRow, [key]: e.target.value })
-                    }
-                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm
-                         focus:outline-none focus:border-blue-400"
-                  />
+
+                  {key === "status" ? (
+                    <select
+                      value={editRow[key]}
+                      onChange={(e) =>
+                        setEditRow({ ...editRow, [key]: e.target.value })
+                      }
+                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm
+                     focus:outline-none focus:border-blue-400 bg-white"
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Delivered">Delivered</option>
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      value={editRow[key]}
+                      onChange={(e) =>
+                        setEditRow({ ...editRow, [key]: e.target.value })
+                      }
+                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm
+                     focus:outline-none focus:border-blue-400"
+                    />
+                  )}
                 </div>
               ))}
             </div>
